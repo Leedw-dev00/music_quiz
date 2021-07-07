@@ -27,10 +27,52 @@ class _HomePageState extends State<HomePage>{
   @override
   void initState(){
     _user_ck = [];
+    _isUserCheck;
     _getUserCheck();
     _initTexts();
-    _isUserCheck;
     super.initState();
+  }
+
+  Future<bool> _onBackPressed() {
+    return showDialog(
+      context: context,
+      builder: (context) => new AlertDialog(
+        title: new Text('게임종료'),
+        content: new Text('게임을 완전히 종료하시겠습니까?'),
+        actions: <Widget>[
+          new GestureDetector(
+            onTap: () => Navigator.of(context).pop(false),
+            child: roundedButton("No", const Color(0xFFff8a7d),
+                const Color(0xFFFFFFFF)),
+          ),
+          new GestureDetector(
+            onTap: () => Navigator.of(context).pop(true),
+            child: roundedButton(" Yes ", const Color.fromRGBO(116, 116, 191, 1.0),
+                const Color(0xFFFFFFFF)),
+          ),
+        ],
+      ),
+    ) ??
+        false;
+  }
+
+  Widget roundedButton(String buttonLabel, Color bgColor, Color textColor) {
+    var loginBtn = new Container(
+      height: 40.0,
+      width: 80.0,
+      padding: EdgeInsets.all(5.0),
+      alignment: FractionalOffset.center,
+      decoration: new BoxDecoration(
+        color: bgColor,
+        borderRadius: new BorderRadius.all(const Radius.circular(2.0)),
+      ),
+      child: Text(
+        buttonLabel,
+        style: new TextStyle(
+            color: textColor, fontSize: 12.0, fontWeight: FontWeight.bold),
+      ),
+    );
+    return loginBtn;
   }
 
 
@@ -66,13 +108,14 @@ class _HomePageState extends State<HomePage>{
   }
 
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xFF70BFB5),
-      body: Container(
-        width: MediaQuery.of(context).size.width,
+      body: WillPopScope(
+        onWillPop: _onBackPressed,
+        child: Container(
+            width: MediaQuery.of(context).size.width,
             child: Stack(
               children: <Widget>[
                 Image.asset('assets/images/home_back1.png', width: MediaQuery.of(context).size.width, fit: BoxFit.cover,),
@@ -88,7 +131,7 @@ class _HomePageState extends State<HomePage>{
                           onTap: (){
                             if(_isUserCheck){
                               print('Already exsited');
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => Quiz_Page()),);
+                              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Quiz_Page()),);
                             }else{
                               print('save success');
                               _addUserRegister();
@@ -127,7 +170,8 @@ class _HomePageState extends State<HomePage>{
                 )
               ],
             )
-          ),
+        ),
+      )
         );
 
   }
