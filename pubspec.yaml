@@ -38,6 +38,7 @@ dependencies:
   platform:
   shared_preferences:
   rflutter_alert: ^2.0.2
+  audioplayers: ^0.19.1
 
 
 
@@ -70,6 +71,8 @@ flutter:
     - assets/images/rank_btn.png
     - assets/images/sound.png
     - assets/images/
+    - assets/sounds/click1.mp3
+    - assets/sounds/fail.mp3
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

@@ -4,7 +4,6 @@ import 'package:music_quiz/pages/quiz_page.dart';
 import 'package:music_quiz/pages/rank_page.dart';
 import 'package:music_quiz/datas/userRegister_data.dart';
 import 'package:kakao_flutter_sdk/all.dart';
-import 'package:music_quiz/datas/userRegister_data.dart';
 import 'package:music_quiz/datas/userCheck_data.dart';
 import '../models/userCheck_model.dart';
 
@@ -89,7 +88,7 @@ class _HomePageState extends State<HomePage>{
   _addUserRegister(){
     UserRegister_Data.addUser(user_id).then((result){
       if('success' == result){
-        print('aa');
+        print('user register success');
       }
     });
   }

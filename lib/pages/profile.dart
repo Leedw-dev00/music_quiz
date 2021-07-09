@@ -31,7 +31,6 @@ class _Profile_pageState extends State<Profile_page>{
       profile_image = user.kakaoAccount.profile.profileImageUrl;
     });
   }
-
   String profile_image = 'None';
   bool _default_Image = true;
 

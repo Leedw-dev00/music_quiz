@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:music_quiz/datas/point_data.dart';
 import 'package:music_quiz/datas/quiz_data.dart';
 
 import 'package:music_quiz/models/quiz_model.dart';
@@ -8,6 +9,9 @@ import 'package:kakao_flutter_sdk/all.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:music_quiz/datas/userCheck_data.dart';
 import '../models/userCheck_model.dart';
+import 'package:audioplayers/audioplayers.dart';
+
+
 
 class Quiz_Page extends StatefulWidget{
   @override
@@ -25,6 +29,7 @@ class _Quiz_PageState extends State<Quiz_Page> {
   bool _isLoading;
   bool _isLoading2;
   List<User_Ck> _user_ck;
+  AudioCache player = new AudioCache();
 
 
   @override
@@ -32,11 +37,9 @@ class _Quiz_PageState extends State<Quiz_Page> {
     _quiz = [];
     _getQuiz();
     list.shuffle();
-    _counter;
     _isLoading = false;
     _isLoading2 = false;
     _user_ck = [];
-
     _initTexts();
     super.initState();
   }
@@ -190,20 +193,32 @@ class _Quiz_PageState extends State<Quiz_Page> {
     });
   }
 
+  _addPoint(){
+    Point_Data.addPoint(user_id, point.toString()).then((result){
+      if('success' == result){
+        print('point save success');
+      }
+    });
+  }
+
   //Quiz 정답 시 다음문제 넘어가기
-  void nextQuestion(){
+  void nextSuccessQuestion(){
     setState(() {
-      if(_counter < 2){
+      if(_counter < 19){
         int min = 0;
         int max = _quiz.length;
         Q_NO = min + rnd.nextInt(max - min);
-        //int point = int.parse('${_user_ck[0].temp_point}') += 30;
+        const soundPath = "sounds/click1.mp3";
+        player.play(soundPath);
+        point += 30;
         _incrementCounter();
-      }else if(_counter < 3){
+      }else if(_counter < 20){
         int min = 0;
         int max = _quiz.length;
         Q_NO = min + rnd.nextInt(max - min);
         _incrementCounter();
+        point += 30;
+        _addPoint();
         _onAlertButtonsPressed(context);
       }else{
         int min = 0;
@@ -213,6 +228,35 @@ class _Quiz_PageState extends State<Quiz_Page> {
       }
     });
   }
+
+  //Quiz 실패 시 다음문제 넘어가기
+  void nextFailQuestion(){
+    setState(() {
+      if(_counter < 19){
+        int min = 0;
+        int max = _quiz.length;
+        Q_NO = min + rnd.nextInt(max - min);
+        const soundPath = "sounds/fail.mp3";
+        player.play(soundPath);
+        point -= 10;
+        _incrementCounter();
+      }else if(_counter < 20){
+        int min = 0;
+        int max = _quiz.length;
+        Q_NO = min + rnd.nextInt(max - min);
+        _incrementCounter();
+        point -= 30;
+        _addPoint();
+        _onAlertButtonsPressed(context);
+      }else{
+        int min = 0;
+        int max = _quiz.length;
+        Q_NO = min + rnd.nextInt(max - min);
+        _incrementCounter();
+      }
+    });
+  }
+
 
   //Quiz 정답 정보 불러오기
   String getAnswer(){
@@ -253,7 +297,11 @@ class _Quiz_PageState extends State<Quiz_Page> {
         appBar: AppBar(
           elevation: 0.0,
           backgroundColor: Colors.white,
-          title: Text("Stage $_counter", style: TextStyle(color: Colors.black),),
+          title: _isLoading2
+          ?
+          Text("Stage ${_counter+1}", style: TextStyle(color: Colors.black),)
+          :
+          CircularProgressIndicator(),
           leading: IconButton(icon: Icon(Icons.close, color: Colors.black,), onPressed: (){_onExitButtonsPressed(context);},),
         ),
         backgroundColor: Colors.white,
@@ -268,7 +316,7 @@ class _Quiz_PageState extends State<Quiz_Page> {
                       ?
                   Column(
                     children: <Widget>[
-                      Text('${_user_ck[0].temp_point}', style:
+                      Text('$point', style:
                       TextStyle(
                           fontSize: 20.0,
                           color: Colors.redAccent
@@ -298,9 +346,10 @@ class _Quiz_PageState extends State<Quiz_Page> {
                           child: Text(getChoice1()),
                           onPressed: (){
                             if(_quiz[Q_NO].choice1 == _quiz[Q_NO].answer){
-                              nextQuestion();
+                              nextSuccessQuestion();
                               print('success');
                             }else{
+                              nextFailQuestion();
                               print('fail');
                             }
                           },
@@ -328,9 +377,10 @@ class _Quiz_PageState extends State<Quiz_Page> {
                           child: Text(getChoice2()),
                           onPressed: (){
                             if(_quiz[Q_NO].choice2 == _quiz[Q_NO].answer){
-                              nextQuestion();
+                              nextSuccessQuestion();
                               print('success');
                             }else{
+                              nextFailQuestion();
                               print('fail');
                             }
                           },
@@ -358,9 +408,10 @@ class _Quiz_PageState extends State<Quiz_Page> {
                           child: Text(getChoice3()),
                           onPressed: (){
                             if(_quiz[Q_NO].choice3 == _quiz[Q_NO].answer){
-                              nextQuestion();
+                              nextSuccessQuestion();
                               print('success');
                             }else{
+                              nextFailQuestion();
                               print('fail');
                             }
                           },
@@ -388,9 +439,10 @@ class _Quiz_PageState extends State<Quiz_Page> {
                           child: Text(getChoice4()),
                           onPressed: (){
                             if(_quiz[Q_NO].choice4 == _quiz[Q_NO].answer){
-                              nextQuestion();
+                              nextSuccessQuestion();
                               print('success');
                             }else{
+                              nextFailQuestion();
                               print('fail');
                             }
                           },
@@ -412,7 +464,6 @@ class _Quiz_PageState extends State<Quiz_Page> {
                   Spacer(),
                 ],
               ),
-
             ),
           ),
         )
