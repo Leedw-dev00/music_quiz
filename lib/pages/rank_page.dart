@@ -1,3 +1,4 @@
+import 'dart:core';
 import 'package:flutter/material.dart';
 import 'package:music_quiz/datas/rank_data.dart';
 import 'package:music_quiz/pages/quiz_page.dart';
@@ -10,10 +11,26 @@ class Rank_Page extends StatefulWidget{
   _Rank_PageState createState() => _Rank_PageState();
 }
 
-class _Rank_PageState extends State<Rank_Page>{
+class _Rank_PageState extends State<Rank_Page> with WidgetsBindingObserver{
 
   List<Rank> _rank;
   bool _isLoading;
+  // int daysBetween(DateTime from, DateTime to) {
+  //   from = DateTime(from.year, from.month, from.day);
+  //   to = DateTime(to.year, to.month, to.day);
+  //   return (to.difference(from).inHours / 24).round();
+  // }
+  // DateTime current = DateTime.now();
+  // DateTime lastTime = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day + (7 - DateTime.now().weekday));
+  final int differenceInDays = (DateTime.now().difference(DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day + (7 - DateTime.now().weekday))).inMinutes).round()*-1;
+  String durationToString(int minutes) {
+    var d = Duration(minutes:minutes);
+    List<String> parts = d.toString().split(':');
+    return '${parts[0].padLeft(2, '0')}:${parts[1].padLeft(2, '0')}';
+  }
+
+  //int hour = (differenceInDays ~/ 60).round();
+
 
   @override
   void dispose(){
@@ -85,7 +102,7 @@ class _Rank_PageState extends State<Rank_Page>{
                           SizedBox(width: 20.0),
                           Text('1-50th', style: TextStyle(color: Colors.white, fontSize: 23.0),),
                           Spacer(),
-                          Text('17 : 08 후 종료', style: TextStyle(fontSize: 16.0),),
+                          Text('$differenceInDays', style: TextStyle(fontSize: 16.0),),
                           SizedBox(width: 20.0),
                         ],
                       ),
