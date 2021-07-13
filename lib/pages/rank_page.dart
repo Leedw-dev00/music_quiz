@@ -1,5 +1,6 @@
 import 'dart:core';
 import 'package:flutter/material.dart';
+import 'package:music_quiz/datas/rankDelete_data.dart';
 import 'package:music_quiz/datas/rank_data.dart';
 import 'package:music_quiz/pages/quiz_page.dart';
 import 'package:kakao_flutter_sdk/all.dart';
@@ -15,21 +16,14 @@ class _Rank_PageState extends State<Rank_Page> with WidgetsBindingObserver{
 
   List<Rank> _rank;
   bool _isLoading;
-  // int daysBetween(DateTime from, DateTime to) {
-  //   from = DateTime(from.year, from.month, from.day);
-  //   to = DateTime(to.year, to.month, to.day);
-  //   return (to.difference(from).inHours / 24).round();
-  // }
-  // DateTime current = DateTime.now();
-  // DateTime lastTime = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day + (7 - DateTime.now().weekday));
-  final int differenceInDays = (DateTime.now().difference(DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day + (7 - DateTime.now().weekday))).inMinutes).round()*-1;
+  int differenceInHours = ((DateTime.now().difference(DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day + (2 - DateTime.now().weekday))).inMinutes.round()*-1)) ~/ 60;
+  int differenceInMinutes = ((DateTime.now().difference(DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day + (2 - DateTime.now().weekday))).inMinutes.round()*-1)) % 60;
   String durationToString(int minutes) {
     var d = Duration(minutes:minutes);
     List<String> parts = d.toString().split(':');
     return '${parts[0].padLeft(2, '0')}:${parts[1].padLeft(2, '0')}';
   }
 
-  //int hour = (differenceInDays ~/ 60).round();
 
 
   @override
@@ -44,6 +38,8 @@ class _Rank_PageState extends State<Rank_Page> with WidgetsBindingObserver{
     _rank = [];
     _getRank();
     super.initState();
+    differenceInMinutes;
+    differenceInHours;
   }
 
   _initTexts() async{
@@ -63,7 +59,19 @@ class _Rank_PageState extends State<Rank_Page> with WidgetsBindingObserver{
         _isLoading = false;
       }else{
         _isLoading = true;
+        if(differenceInHours == 0 && differenceInMinutes == 0){
+          _deleteRank();
+        }
       }
+    });
+  }
+
+  _deleteRank(){
+    RankDelete_Data.deleteRank().then((result){
+      if('success' == result){
+        print("Delete Good");
+      }
+      _getRank();
     });
   }
 
@@ -102,7 +110,7 @@ class _Rank_PageState extends State<Rank_Page> with WidgetsBindingObserver{
                           SizedBox(width: 20.0),
                           Text('1-50th', style: TextStyle(color: Colors.white, fontSize: 23.0),),
                           Spacer(),
-                          Text('$differenceInDays', style: TextStyle(fontSize: 16.0),),
+                          Text('${differenceInHours}시간 ${differenceInMinutes}분 후 초기화', style: TextStyle(fontSize: 14.0, color: Colors.black54),),
                           SizedBox(width: 20.0),
                         ],
                       ),
@@ -145,7 +153,21 @@ class _Rank_PageState extends State<Rank_Page> with WidgetsBindingObserver{
                           },
                         ),
                       )
-                      :CircularProgressIndicator(),
+                      :
+                      Container(
+                        height: MediaQuery.of(context).size.height*0.55,
+                        width: MediaQuery.of(context).size.width,
+                        color: Colors.white,
+                        child: Container(
+                          child: Column(
+                            children: <Widget>[
+                              Spacer(),
+                              Text('랭킹 없음! Play 버튼을 클릭하여 랭킹을 등록 해주세요', style: TextStyle(color: Colors.redAccent, fontWeight: FontWeight.bold),),
+                              Spacer(),
+                            ],
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
