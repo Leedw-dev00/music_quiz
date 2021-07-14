@@ -50,8 +50,8 @@ class _Profile_pageState extends State<Profile_page>{
       ),
       backgroundColor: Colors.white,
       body: SafeArea(
-        child: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
+        child: Container(
+          height: MediaQuery.of(context).size.height,
           child: Container(
             padding: EdgeInsets.symmetric(vertical: 10.0),
             child: Column(
@@ -69,10 +69,10 @@ class _Profile_pageState extends State<Profile_page>{
                       height: 150.0,
                       decoration: BoxDecoration(
                         image: DecorationImage(
-                          fit: BoxFit.cover,
-                          image: AssetImage('assets/images/jeon.jpg'),
+                          fit: BoxFit.fitWidth,
+                          image: AssetImage('assets/images/defaultImage.png',),
                         ),
-                        border: Border.all(width: 1.0, color: Colors.grey, style: BorderStyle.solid),
+                        border: Border.all(width: 1.0, color: Color(0xFFf5f5f5), style: BorderStyle.solid),
                         color: Colors.white,
                         shape: BoxShape.circle
                       ),
@@ -115,25 +115,23 @@ class _Profile_pageState extends State<Profile_page>{
                 SizedBox(height: 20.0,),
                 Profile_Set(),
                 SizedBox(height: 50.0,),
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 30.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text('시스템 설정', style:
-                        TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 17.0,
-                          color: Colors.black54
-                        ),
-                      ),
-                      SizedBox(height: 2.0, width: 80.0, child: Container(color: Colors.black54,),),
-                    ],
-                  ),
-                ),
-                SizedBox(height: 20.0),
-                System_Set(),
-                SizedBox(height: 50.0,),
+                // Container(
+                //   padding: EdgeInsets.symmetric(horizontal: 30.0),
+                //   child: Column(
+                //     crossAxisAlignment: CrossAxisAlignment.start,
+                //     children: <Widget>[
+                //       Text('시스템 설정', style:
+                //         TextStyle(
+                //           fontWeight: FontWeight.bold,
+                //           fontSize: 17.0,
+                //           color: Colors.black54
+                //         ),
+                //       ),
+                //       SizedBox(height: 2.0, width: 80.0, child: Container(color: Colors.black54,),),
+                //     ],
+                //   ),
+                // ),
+                Spacer(),
                 Set_Menu(),
               ],
             ),

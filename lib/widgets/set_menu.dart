@@ -18,7 +18,7 @@ class Set_Menu extends StatelessWidget{
       child: Column(
         children: <Widget>[
           Container(
-            height: 10.0,
+            height: 15.0,
             width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
                 color: Color(0xFFf7f7f7)
@@ -29,8 +29,6 @@ class Set_Menu extends StatelessWidget{
             child: Row(
               children: <Widget>[
                 TextButton(child: Text('회원탈퇴', style: TextStyle(fontSize: 15.0),), onPressed: (){},),
-                Spacer(),
-                IconButton(icon: Icon(Icons.arrow_right), onPressed: (){})
               ],
             ),
           ),
@@ -46,8 +44,6 @@ class Set_Menu extends StatelessWidget{
             child: Row(
               children: <Widget>[
                 TextButton(child: Text('로그아웃', style: TextStyle(fontSize: 15.0),), onPressed: (){_logout();},),
-                Spacer(),
-                IconButton(icon: Icon(Icons.arrow_right), onPressed: (){})
               ],
             ),
           ),

@@ -45,7 +45,6 @@ class _Profile_Set extends State<Profile_Set>{
             children: <Widget>[
               Spacer(),
               Container(
-
                   width: MediaQuery.of(context).size.width*0.7,
                   height: 40.0,
                   decoration: BoxDecoration(
@@ -63,7 +62,7 @@ class _Profile_Set extends State<Profile_Set>{
               Spacer(),
             ],
           ),
-          SizedBox(height: 15.0,),
+          SizedBox(height: 20.0,),
           Row(
             children: <Widget>[
               SizedBox(width: 30.0,),
@@ -78,37 +77,42 @@ class _Profile_Set extends State<Profile_Set>{
             padding: EdgeInsets.symmetric(horizontal: 30.0),
             child: Row(
               children: <Widget>[
-                Container(
-                    height: 40.0,
-                    width: 130.0,
-                    decoration: BoxDecoration(
-                        border: Border.all(width: 1.0, color: Color(0xFFE73250)),
-                        borderRadius: BorderRadius.circular(10.0)
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        Text('남', style: TextStyle(fontSize: 15.0),)
-                      ],
-                    )
+                Expanded(
+                  flex: 1,
+                  child: Container(
+                      height: 40.0,
+                      decoration: BoxDecoration(
+                          border: Border.all(width: 1.0, color: Color(0xFFE73250)),
+                          borderRadius: BorderRadius.circular(10.0)
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          Text('남', style: TextStyle(fontSize: 15.0),)
+                        ],
+                      )
+                  ),
                 ),
-                Spacer(),
-                Container(
-                    height: 40.0,
-                    width: 130.0,
-                    decoration: BoxDecoration(
-                        border: Border.all(width: 1.0, color: Colors.grey),
-                        borderRadius: BorderRadius.circular(10.0)
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        Text('여', style: TextStyle(fontSize: 15.0),)
-                      ],
-                    )
-                ),
+                SizedBox(width: 10.0,),
+                Expanded(
+                  flex: 1,
+                  child: Container(
+                      height: 40.0,
+
+                      decoration: BoxDecoration(
+                          border: Border.all(width: 1.0, color: Colors.grey),
+                          borderRadius: BorderRadius.circular(10.0)
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          Text('여', style: TextStyle(fontSize: 15.0),)
+                        ],
+                      )
+                  ),
+                )
               ],
             ),
           )
@@ -151,7 +155,7 @@ class _Profile_Set extends State<Profile_Set>{
               ],
             ),
           ),
-          SizedBox(height: 15.0,),
+          SizedBox(height: 20.0,),
           Row(
             children: <Widget>[
               SizedBox(width: 30.0,),

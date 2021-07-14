@@ -11,6 +11,7 @@ import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:music_quiz/datas/userCheck_data.dart';
 import '../models/userCheck_model.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:intl/intl.dart';
 
 
 
@@ -29,6 +30,7 @@ class _Quiz_PageState extends State<Quiz_Page> {
   Random rnd = new Random();
   bool _isLoading;
   bool _isLoading2;
+  String formatted = DateFormat('yMd').format(DateTime.now());
   List<User_Ck> _user_ck;
   final AudioPlayer _player = AudioPlayer();
 
@@ -67,11 +69,16 @@ class _Quiz_PageState extends State<Quiz_Page> {
       setState(() {
         _user_ck = user_ck;
       });
-      if(user_ck[0].temp_point == null){
+      if(user_ck[0].stage == null){
         _isLoading2 = false;
       }else{
         _isLoading2 = true;
-        _counter = int.parse(user_ck[0].stage);
+        if(user_ck[0].formatted == formatted){
+          _counter = int.parse(user_ck[0].stage);
+        }else{
+          _counter = 0;
+        }
+
       }
     });
   }
@@ -210,7 +217,7 @@ class _Quiz_PageState extends State<Quiz_Page> {
   }
 
   _updateStage(){
-    UpdateStage.updateStage(user_id).then((result){
+    UpdateStage.updateStage(formatted, user_id).then((result){
       if('success' == result){
         print('stage update success');
       }
@@ -232,6 +239,8 @@ class _Quiz_PageState extends State<Quiz_Page> {
         int min = 0;
         int max = _quiz.length;
         Q_NO = min + rnd.nextInt(max - min);
+        _player.setAsset('assets/sounds/success.mp3');
+        _player.play();
         _incrementCounter();
         point += 30;
         _addPoint();
@@ -240,6 +249,8 @@ class _Quiz_PageState extends State<Quiz_Page> {
         int min = 0;
         int max = _quiz.length;
         Q_NO = min + rnd.nextInt(max - min);
+        _player.setAsset('assets/sounds/success.mp3');
+        _player.play();
         _incrementCounter();
       }
     });
@@ -260,6 +271,8 @@ class _Quiz_PageState extends State<Quiz_Page> {
         int min = 0;
         int max = _quiz.length;
         Q_NO = min + rnd.nextInt(max - min);
+        _player.setAsset('assets/sounds/fail.mp3');
+        _player.play();
         _incrementCounter();
         point -= 30;
         _addPoint();
@@ -269,6 +282,8 @@ class _Quiz_PageState extends State<Quiz_Page> {
         int min = 0;
         int max = _quiz.length;
         Q_NO = min + rnd.nextInt(max - min);
+        _player.setAsset('assets/sounds/fail.mp3');
+        _player.play();
         _incrementCounter();
       }
     });
@@ -336,11 +351,12 @@ class _Quiz_PageState extends State<Quiz_Page> {
                   Column(
                     children: <Widget>[
                       Text('$point', style:
-                      TextStyle(
-                          fontSize: 20.0,
-                          color: Colors.redAccent
+                        TextStyle(
+                            fontSize: 20.0,
+                            color: Colors.redAccent
+                        ),
                       ),
-                      ),
+                      Text('$formatted'),
                       SizedBox(height: 40.0,),
                       Image.asset('assets/images/sound.png', width: MediaQuery.of(context).size.width*0.8, fit: BoxFit.cover),
                       SizedBox(height: 45.0,),
