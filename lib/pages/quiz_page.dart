@@ -356,7 +356,6 @@ class _Quiz_PageState extends State<Quiz_Page> {
                             color: Colors.redAccent
                         ),
                       ),
-                      Text('$formatted'),
                       SizedBox(height: 40.0,),
                       Image.asset('assets/images/sound.png', width: MediaQuery.of(context).size.width*0.8, fit: BoxFit.cover),
                       SizedBox(height: 45.0,),
