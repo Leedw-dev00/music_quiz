@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:music_quiz/datas/point_data.dart';
 import 'package:music_quiz/datas/quiz_data.dart';
+import 'package:music_quiz/datas/update_Stage.dart';
 
 import 'package:music_quiz/models/quiz_model.dart';
 import 'package:music_quiz/pages/home_page.dart';
@@ -9,7 +10,7 @@ import 'package:kakao_flutter_sdk/all.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:music_quiz/datas/userCheck_data.dart';
 import '../models/userCheck_model.dart';
-import 'package:audioplayers/audioplayers.dart';
+import 'package:just_audio/just_audio.dart';
 
 
 
@@ -22,14 +23,20 @@ class _Quiz_PageState extends State<Quiz_Page> {
 
   List<int> list = [0,1,2,3];
   List<Quiz> _quiz;
-  int _counter = 0;
+  int _counter;
   int Q_NO = 0;
   int point = 0;
   Random rnd = new Random();
   bool _isLoading;
   bool _isLoading2;
   List<User_Ck> _user_ck;
-  AudioCache player = new AudioCache();
+  final AudioPlayer _player = AudioPlayer();
+
+  @override
+  void dispose(){
+    _player.dispose();
+    super.dispose();
+  }
 
 
   @override
@@ -64,6 +71,7 @@ class _Quiz_PageState extends State<Quiz_Page> {
         _isLoading2 = false;
       }else{
         _isLoading2 = true;
+        _counter = int.parse(user_ck[0].stage);
       }
     });
   }
@@ -201,6 +209,14 @@ class _Quiz_PageState extends State<Quiz_Page> {
     });
   }
 
+  _updateStage(){
+    UpdateStage.updateStage(user_id).then((result){
+      if('success' == result){
+        print('stage update success');
+      }
+    });
+  }
+
   //Quiz 정답 시 다음문제 넘어가기
   void nextSuccessQuestion(){
     setState(() {
@@ -208,8 +224,8 @@ class _Quiz_PageState extends State<Quiz_Page> {
         int min = 0;
         int max = _quiz.length;
         Q_NO = min + rnd.nextInt(max - min);
-        const soundPath = "sounds/click1.mp3";
-        player.play(soundPath);
+        _player.setAsset('assets/sounds/success.mp3');
+        _player.play();
         point += 30;
         _incrementCounter();
       }else if(_counter < 20){
@@ -236,8 +252,8 @@ class _Quiz_PageState extends State<Quiz_Page> {
         int min = 0;
         int max = _quiz.length;
         Q_NO = min + rnd.nextInt(max - min);
-        const soundPath = "sounds/fail.mp3";
-        player.play(soundPath);
+        _player.setAsset('assets/sounds/fail.mp3');
+        _player.play();
         point -= 10;
         _incrementCounter();
       }else if(_counter < 20){
@@ -247,6 +263,7 @@ class _Quiz_PageState extends State<Quiz_Page> {
         _incrementCounter();
         point -= 30;
         _addPoint();
+        _updateStage();
         _onAlertButtonsPressed(context);
       }else{
         int min = 0;
@@ -297,6 +314,7 @@ class _Quiz_PageState extends State<Quiz_Page> {
         appBar: AppBar(
           elevation: 0.0,
           backgroundColor: Colors.white,
+          centerTitle: true,
           title: _isLoading2
           ?
           Text("Stage ${_counter+1}", style: TextStyle(color: Colors.black),)
@@ -307,7 +325,8 @@ class _Quiz_PageState extends State<Quiz_Page> {
         backgroundColor: Colors.white,
         body: WillPopScope(
           onWillPop: _onBackPressed,
-          child: SafeArea(
+          child: SingleChildScrollView(
+            scrollDirection: Axis.vertical,
             child: Container(
               child: Row(
                 children: <Widget>[
@@ -448,10 +467,10 @@ class _Quiz_PageState extends State<Quiz_Page> {
                           },
                         ),
                       ),
-                      SizedBox(height: 70),
+                      SizedBox(height: 40),
                       Container(
                           width: MediaQuery.of(context).size.width*0.9,
-                          height: 70.0,
+                          height: MediaQuery.of(context).size.height*0.07,
                           decoration: BoxDecoration(
                               border: Border.all(width: 1.0, color: Colors.grey)
                           ),

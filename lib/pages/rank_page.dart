@@ -16,8 +16,12 @@ class _Rank_PageState extends State<Rank_Page> with WidgetsBindingObserver{
 
   List<Rank> _rank;
   bool _isLoading;
-  int differenceInHours = ((DateTime.now().difference(DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day + (2 - DateTime.now().weekday))).inMinutes.round()*-1)) ~/ 60;
-  int differenceInMinutes = ((DateTime.now().difference(DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day + (2 - DateTime.now().weekday))).inMinutes.round()*-1)) % 60;
+  int differenceTotal = ((DateTime.now().difference(DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day + (6 - DateTime.now().weekday))).inMinutes*-1));
+  int differenceInHours = ((DateTime.now().difference(DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day + (6 - DateTime.now().weekday))).inMinutes.round()*-1)) ~/ 60;
+  int differenceInMinutes = ((DateTime.now().difference(DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day + (6 - DateTime.now().weekday))).inMinutes.round()*-1)) % 60;
+  int differenceInHours2 = 48+((DateTime.now().difference(DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day + (6 - DateTime.now().weekday))).inMinutes.round()*-1)) ~/ 60;
+  int differenceInMinutes2 = ((DateTime.now().difference(DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day + (6 - DateTime.now().weekday))).inMinutes.round()*-1)) % 60;
+
   String durationToString(int minutes) {
     var d = Duration(minutes:minutes);
     List<String> parts = d.toString().split(':');
@@ -38,6 +42,7 @@ class _Rank_PageState extends State<Rank_Page> with WidgetsBindingObserver{
     _rank = [];
     _getRank();
     super.initState();
+    differenceTotal;
     differenceInMinutes;
     differenceInHours;
   }
@@ -59,7 +64,7 @@ class _Rank_PageState extends State<Rank_Page> with WidgetsBindingObserver{
         _isLoading = false;
       }else{
         _isLoading = true;
-        if(differenceInHours == 0 && differenceInMinutes == 0){
+        if(differenceTotal <= 0){
           _deleteRank();
         }
       }
@@ -81,14 +86,12 @@ class _Rank_PageState extends State<Rank_Page> with WidgetsBindingObserver{
       appBar: AppBar(
         backgroundColor: Color(0xFF848FD8),
         elevation: 0.0,
+        centerTitle: true,
         title: Text('Rank', style: TextStyle(color: Colors.white),),
         leading: IconButton(
           icon: Icon(Icons.close, color: Colors.white),
           onPressed: (){Navigator.pop(context);},
         ),
-        actions: [
-          IconButton(icon: Icon(Icons.contact_support_outlined, color: Colors.white,), onPressed: (){})
-        ],
       ),
       backgroundColor: Color(0xFF848FD8),
       body: SafeArea(
@@ -105,6 +108,18 @@ class _Rank_PageState extends State<Rank_Page> with WidgetsBindingObserver{
                   child: Column(
                     children: <Widget>[
                       Spacer(),
+                      differenceTotal <= 0
+                      ?
+                      Row(
+                        children: <Widget>[
+                          SizedBox(width: 20.0),
+                          Text('1-50th', style: TextStyle(color: Colors.white, fontSize: 23.0),),
+                          Spacer(),
+                          Text('${differenceInHours2}시간 ${differenceInMinutes2}분 후 재시작', style: TextStyle(fontSize: 14.0, color: Colors.black54),),
+                          SizedBox(width: 20.0),
+                        ],
+                      )
+                      :
                       Row(
                         children: <Widget>[
                           SizedBox(width: 20.0),
