@@ -244,6 +244,7 @@ class _Quiz_PageState extends State<Quiz_Page> {
         _incrementCounter();
         point += 30;
         _addPoint();
+        _updateStage;
         _onAlertButtonsPressed(context);
       }else{
         int min = 0;
