@@ -134,6 +134,7 @@ class _HomePageState extends State<HomePage>{
                             }else{
                               print('save success');
                               _addUserRegister();
+                              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Quiz_Page()),);
                             }
                           },
                         ),

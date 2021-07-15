@@ -31,6 +31,7 @@ class _Quiz_PageState extends State<Quiz_Page> {
   bool _isLoading;
   bool _isLoading2;
   String formatted = DateFormat('yMd').format(DateTime.now());
+  bool _isStart = false;
   List<User_Ck> _user_ck;
   final AudioPlayer _player = AudioPlayer();
 
@@ -227,7 +228,10 @@ class _Quiz_PageState extends State<Quiz_Page> {
   //Quiz 정답 시 다음문제 넘어가기
   void nextSuccessQuestion(){
     setState(() {
-      if(_counter < 19){
+      if (_counter < 1){
+        _player.play();
+        _incrementCounter();
+      }else if(_counter < 20){
         int min = 0;
         int max = _quiz.length;
         Q_NO = min + rnd.nextInt(max - min);
@@ -235,7 +239,7 @@ class _Quiz_PageState extends State<Quiz_Page> {
         _player.play();
         point += 30;
         _incrementCounter();
-      }else if(_counter < 20){
+      }else if(_counter < 21){
         int min = 0;
         int max = _quiz.length;
         Q_NO = min + rnd.nextInt(max - min);
@@ -260,7 +264,10 @@ class _Quiz_PageState extends State<Quiz_Page> {
   //Quiz 실패 시 다음문제 넘어가기
   void nextFailQuestion(){
     setState(() {
-      if(_counter < 19){
+      if (_counter < 1){
+        _player.play();
+        _incrementCounter();
+      }else if(_counter < 20){
         int min = 0;
         int max = _quiz.length;
         Q_NO = min + rnd.nextInt(max - min);
@@ -268,7 +275,7 @@ class _Quiz_PageState extends State<Quiz_Page> {
         _player.play();
         point -= 10;
         _incrementCounter();
-      }else if(_counter < 20){
+      }else if(_counter < 21 ){
         int min = 0;
         int max = _quiz.length;
         Q_NO = min + rnd.nextInt(max - min);
@@ -321,6 +328,11 @@ class _Quiz_PageState extends State<Quiz_Page> {
     return _quiz[Q_NO].choice4;
   }
 
+  //Quiz 문제 정보 불러오기
+  String getQuestion(){
+    print(_quiz[Q_NO].question);
+    return _quiz[Q_NO].question;
+  }
 
 
   @override
@@ -333,7 +345,7 @@ class _Quiz_PageState extends State<Quiz_Page> {
           centerTitle: true,
           title: _isLoading2
           ?
-          Text("Stage ${_counter+1}", style: TextStyle(color: Colors.black),)
+          Text("Stage ${_counter}", style: TextStyle(color: Colors.black),)
           :
           CircularProgressIndicator(),
           leading: IconButton(icon: Icon(Icons.close, color: Colors.black,), onPressed: (){_onExitButtonsPressed(context);},),
@@ -352,145 +364,178 @@ class _Quiz_PageState extends State<Quiz_Page> {
                   Column(
                     children: <Widget>[
                       Text('$point', style:
-                        TextStyle(
-                            fontSize: 20.0,
-                            color: Colors.redAccent
-                        ),
+                      TextStyle(
+                          fontSize: 20.0,
+                          color: Colors.redAccent
+                      ),
                       ),
                       SizedBox(height: 40.0,),
-                      Image.asset('assets/images/sound.png', width: MediaQuery.of(context).size.width*0.8, fit: BoxFit.cover),
-                      SizedBox(height: 45.0,),
-                      Container(
-                        height: 40.0,
-                        width: MediaQuery.of(context).size.width * 0.6,
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(10.0),
-                            border: Border.all(width: 1.0),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.withOpacity(0.5),
-                                spreadRadius: 1,
-                                blurRadius: 4,
-                                offset: Offset(3, 3),
-                              )
-                            ]
-                        ),
-                        child: FlatButton(
-                          textColor: Colors.black,
-                          child: Text(getChoice1()),
-                          onPressed: (){
-                            if(_quiz[Q_NO].choice1 == _quiz[Q_NO].answer){
-                              nextSuccessQuestion();
-                              print('success');
-                            }else{
-                              nextFailQuestion();
-                              print('fail');
-                            }
-                          },
-                        ),
+                      InkWell(
+                        child: Image.asset('assets/images/sound.png', width: MediaQuery.of(context).size.width*0.8, fit: BoxFit.cover),
+                        onTap: (){
+                          setState(() {
+                          _player.setUrl(getQuestion());
+                          });
+                        },
                       ),
-                      SizedBox(height: 13.0),
+                      SizedBox(height: 5.0,),
+
+                      SizedBox(height: 20.0,),
+                      _counter == 0
+                      ?
                       Container(
-                        height: 40.0,
-                        width: MediaQuery.of(context).size.width * 0.6,
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(10.0),
-                            border: Border.all(width: 1.0),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.withOpacity(0.5),
-                                spreadRadius: 1,
-                                blurRadius: 4,
-                                offset: Offset(3, 3),
-                              )
-                            ]
-                        ),
-                        child: FlatButton(
-                          textColor: Colors.black,
-                          child: Text(getChoice2()),
-                          onPressed: (){
-                            if(_quiz[Q_NO].choice2 == _quiz[Q_NO].answer){
-                              nextSuccessQuestion();
-                              print('success');
-                            }else{
-                              nextFailQuestion();
-                              print('fail');
-                            }
-                          },
-                        ),
-                      ),
-                      SizedBox(height: 13.0),
+                        child: Column(
+                          children: <Widget>[
+                            Text('게임 시작 전 볼륨을 확인해주세요!!\n준비가 됐다면 Start 버튼을 클릭해주세요', style:
+                              TextStyle(
+                                color: Colors.blueGrey,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16.0
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                            SizedBox(height: 40.0,),
+                            FlatButton(child:
+                            Text('Start', style:
+                              TextStyle(
+                                fontSize: 20.0,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.red
+                              ),
+                            ),
+                            onPressed: (){nextSuccessQuestion();}),
+                          ],
+                        )
+                      )
+                      :
                       Container(
-                        height: 40.0,
-                        width: MediaQuery.of(context).size.width * 0.6,
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(10.0),
-                            border: Border.all(width: 1.0),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.withOpacity(0.5),
-                                spreadRadius: 1,
-                                blurRadius: 4,
-                                offset: Offset(3, 3),
-                              )
-                            ]
+                        child: Column(
+                          children: <Widget>[
+                            Container(
+                              height: 40.0,
+                              width: MediaQuery.of(context).size.width * 0.6,
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  border: Border.all(width: 1.0),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey.withOpacity(0.5),
+                                      spreadRadius: 1,
+                                      blurRadius: 4,
+                                      offset: Offset(3, 3),
+                                    )
+                                  ]
+                              ),
+                              child: FlatButton(
+                                textColor: Colors.black,
+                                child: Text(getChoice1()),
+                                onPressed: (){
+                                  if(_quiz[Q_NO].choice1 == _quiz[Q_NO].answer){
+                                    nextSuccessQuestion();
+                                    print('success');
+                                  }else{
+                                    nextFailQuestion();
+                                    print('fail');
+                                  }
+                                },
+                              ),
+                            ),
+                            SizedBox(height: 13.0),
+                            Container(
+                              height: 40.0,
+                              width: MediaQuery.of(context).size.width * 0.6,
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  border: Border.all(width: 1.0),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey.withOpacity(0.5),
+                                      spreadRadius: 1,
+                                      blurRadius: 4,
+                                      offset: Offset(3, 3),
+                                    )
+                                  ]
+                              ),
+                              child: FlatButton(
+                                textColor: Colors.black,
+                                child: Text(getChoice2()),
+                                onPressed: (){
+                                  if(_quiz[Q_NO].choice2 == _quiz[Q_NO].answer){
+                                    nextSuccessQuestion();
+                                    print('success');
+                                  }else{
+                                    nextFailQuestion();
+                                    print('fail');
+                                  }
+                                },
+                              ),
+                            ),
+                            SizedBox(height: 13.0),
+                            Container(
+                              height: 40.0,
+                              width: MediaQuery.of(context).size.width * 0.6,
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  border: Border.all(width: 1.0),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey.withOpacity(0.5),
+                                      spreadRadius: 1,
+                                      blurRadius: 4,
+                                      offset: Offset(3, 3),
+                                    )
+                                  ]
+                              ),
+                              child: FlatButton(
+                                textColor: Colors.black,
+                                child: Text(getChoice3()),
+                                onPressed: (){
+                                  if(_quiz[Q_NO].choice3 == _quiz[Q_NO].answer){
+                                    nextSuccessQuestion();
+                                    print('success');
+                                  }else{
+                                    nextFailQuestion();
+                                    print('fail');
+                                  }
+                                },
+                              ),
+                            ),
+                            SizedBox(height: 13.0),
+                            Container(
+                              height: 40.0,
+                              width: MediaQuery.of(context).size.width * 0.6,
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  border: Border.all(width: 1.0),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey.withOpacity(0.5),
+                                      spreadRadius: 1,
+                                      blurRadius: 4,
+                                      offset: Offset(3, 3),
+                                    )
+                                  ]
+                              ),
+                              child: FlatButton(
+                                textColor: Colors.black,
+                                child: Text(getChoice4()),
+                                onPressed: (){
+                                  if(_quiz[Q_NO].choice4 == _quiz[Q_NO].answer){
+                                    nextSuccessQuestion();
+                                    print('success');
+                                  }else{
+                                    nextFailQuestion();
+                                    print('fail');
+                                  }
+                                },
+                              ),
+                            ),
+                          ],
                         ),
-                        child: FlatButton(
-                          textColor: Colors.black,
-                          child: Text(getChoice3()),
-                          onPressed: (){
-                            if(_quiz[Q_NO].choice3 == _quiz[Q_NO].answer){
-                              nextSuccessQuestion();
-                              print('success');
-                            }else{
-                              nextFailQuestion();
-                              print('fail');
-                            }
-                          },
-                        ),
-                      ),
-                      SizedBox(height: 13.0),
-                      Container(
-                        height: 40.0,
-                        width: MediaQuery.of(context).size.width * 0.6,
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(10.0),
-                            border: Border.all(width: 1.0),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.withOpacity(0.5),
-                                spreadRadius: 1,
-                                blurRadius: 4,
-                                offset: Offset(3, 3),
-                              )
-                            ]
-                        ),
-                        child: FlatButton(
-                          textColor: Colors.black,
-                          child: Text(getChoice4()),
-                          onPressed: (){
-                            if(_quiz[Q_NO].choice4 == _quiz[Q_NO].answer){
-                              nextSuccessQuestion();
-                              print('success');
-                            }else{
-                              nextFailQuestion();
-                              print('fail');
-                            }
-                          },
-                        ),
-                      ),
-                      SizedBox(height: 40),
-                      Container(
-                          width: MediaQuery.of(context).size.width*0.9,
-                          height: MediaQuery.of(context).size.height*0.07,
-                          decoration: BoxDecoration(
-                              border: Border.all(width: 1.0, color: Colors.grey)
-                          ),
-                          child: Text('Banner AD')
                       ),
                     ],
                   )
@@ -499,7 +544,7 @@ class _Quiz_PageState extends State<Quiz_Page> {
                   Spacer(),
                 ],
               ),
-            ),
+            )
           ),
         )
       )
