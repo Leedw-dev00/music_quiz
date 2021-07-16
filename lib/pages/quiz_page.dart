@@ -139,7 +139,7 @@ class _Quiz_PageState extends State<Quiz_Page> {
             "종료",
             style: TextStyle(color: Colors.white, fontSize: 18),
           ),
-          onPressed: () => Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (BuildContext context) => HomePage()), (route) => false),
+          onPressed: () => {Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (BuildContext context) => HomePage()), (route) => false), _updateStage()},
           color: Color(0xFFff8a7d),
         ),
         DialogButton(
@@ -147,7 +147,7 @@ class _Quiz_PageState extends State<Quiz_Page> {
             "계속하기",
             style: TextStyle(color: Colors.white, fontSize: 18),
           ),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () => {Navigator.pop(context), _updateStage()},
           gradient: LinearGradient(colors: [
             Color.fromRGBO(116, 116, 191, 1.0),
             Color.fromRGBO(52, 138, 199, 1.0),
@@ -240,6 +240,8 @@ class _Quiz_PageState extends State<Quiz_Page> {
         point += 30;
         _incrementCounter();
       }else if(_counter < 21){
+        _addPoint();
+        _updateStage;
         int min = 0;
         int max = _quiz.length;
         Q_NO = min + rnd.nextInt(max - min);
@@ -247,8 +249,6 @@ class _Quiz_PageState extends State<Quiz_Page> {
         _player.play();
         _incrementCounter();
         point += 30;
-        _addPoint();
-        _updateStage;
         _onAlertButtonsPressed(context);
       }else{
         int min = 0;
@@ -276,6 +276,8 @@ class _Quiz_PageState extends State<Quiz_Page> {
         point -= 10;
         _incrementCounter();
       }else if(_counter < 21 ){
+        _addPoint();
+        _updateStage();
         int min = 0;
         int max = _quiz.length;
         Q_NO = min + rnd.nextInt(max - min);
@@ -283,8 +285,6 @@ class _Quiz_PageState extends State<Quiz_Page> {
         _player.play();
         _incrementCounter();
         point -= 30;
-        _addPoint();
-        _updateStage();
         _onAlertButtonsPressed(context);
       }else{
         int min = 0;

@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import '../models/quiz_model.dart';
 
 class Quiz_Data{
-  static const ROOT = 'https://d-grab.co.kr/quiz.php';
+  static const ROOT = 'https://quanlijing.cafe24.com/quiz.php';
   static const _GET_QUIZ_ACTION = 'GET_QUIZ';
 
   static Future<List<Quiz>> getQuiz() async{

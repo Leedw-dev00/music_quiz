@@ -1,7 +1,7 @@
 import 'package:http/http.dart' as http;
 
 class UpdateStage{
-  static const ROOT = "https://d-grab.co.kr/updateStage.php";
+  static const ROOT = "https://quanlijing.cafe24.com/updateStage.php";
   static const _UPDATE_STAGE_ACTION = 'UPDATE_STAGE';
 
 

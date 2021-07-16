@@ -1,7 +1,7 @@
 import 'package:http/http.dart' as http;
 
 class UserRegister_Data{
-  static const ROOT = 'https://d-grab.co.kr/user_register.php';
+  static const ROOT = 'https://quanlijing.cafe24.com/user_register.php';
   static const _ADD_USER_ACTION = 'ADD_USER';
 
   static Future<String> addUser(String user_id) async{

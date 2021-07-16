@@ -2,7 +2,7 @@ import 'package:http/http.dart' as http;
 
 
 class RankDelete_Data{
-  static const ROOT = 'https://d-grab.co.kr/deleteRank.php';
+  static const ROOT = 'https://quanlijing.cafe24.com/deleteRank.php';
   static const _DELETE_RANK_POINT = 'DELETE_RANK';
 
   static Future<String> deleteRank() async{

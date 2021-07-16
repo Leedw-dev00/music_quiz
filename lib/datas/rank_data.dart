@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import '../models/rank_model.dart';
 
 class Rank_Data{
-  static const ROOT = 'https://d-grab.co.kr/rank_point.php';
+  static const ROOT = 'https://quanlijing.cafe24.com/rank_point.php';
   static const _GET_RANK_POINT = 'RANK_POINT';
 
   static Future<List<Rank>> getRank() async{

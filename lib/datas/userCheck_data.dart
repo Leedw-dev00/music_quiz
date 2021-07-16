@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import '../models/userCheck_model.dart';
 
 class UserCheck_Data{
-  static const ROOT = 'https://d-grab.co.kr/user_check.php';
+  static const ROOT = 'https://quanlijing.cafe24.com/user_check.php';
   static  const _GET_USER_CHECK = 'USER_CK';
 
   static Future<List<User_Ck>> getUserCheck(String user_id) async {

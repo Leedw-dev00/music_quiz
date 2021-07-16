@@ -1,7 +1,7 @@
 import 'package:http/http.dart' as http;
 
 class Point_Data{
-  static const ROOT = 'https://d-grab.co.kr/pointAdd.php';
+  static const ROOT = 'https://quanlijing.cafe24.com/pointAdd.php';
   static const _ADD_POINT = 'ADD_POINT';
 
   static Future<String> addPoint(String user_id, String point) async{

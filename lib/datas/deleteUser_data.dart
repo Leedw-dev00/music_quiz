@@ -1,7 +1,7 @@
 import 'package:http/http.dart' as http;
 
 class Delete_User {
-  static const ROOT = 'https://d-grab.co.kr/delete_user.php';
+  static const ROOT = 'https://quanlijing.cafe24.com/delete_user.php';
   static const _DELETE_USER_ACTION = 'DELETE_USER';
 
   static Future<String> deleteUser(String user_id) async {
